@@ -1,152 +1,283 @@
+
 import {
   CodeSurfer,
   CodeSurferColumns,
   Step,
 } from "code-surfer";
-import { github, vsDark } from "@code-surfer/themes";
+import { github, vsDark, dracula } from "@code-surfer/themes";
 
 export const theme = vsDark;
 
-# Hello 👋
+<CodeSurfer>
 
-You are using [MDX Deck](https://github.com/jxnblk/mdx-deck) and [Code Surfer](https://codesurfer.pomb.us)
+```shell
+> func init MyFunctionProj
+
+```
+
+```shell
+> func init MyFunctionProj
+Select a number for worker runtime:
+1. dotnet
+2. dotnet (isolated process)
+3. node
+4. python
+5. powershell
+6. custom
+Choose option: 
+```
+
+```shell
+> func init MyFunctionProj
+Select a number for worker runtime:
+1. dotnet
+2. dotnet (isolated process)
+3. node
+4. python
+5. powershell
+6. custom
+Choose option: 1
+```
+
+```shell
+> func init MyFunctionProj
+Select a number for worker runtime:
+1. dotnet
+2. dotnet (isolated process)
+3. node
+4. python
+5. powershell
+6. custom
+Choose option: 1
+Select a number for language:
+1. c#
+2. f#
+Choose option: 
+```
+
+```shell
+> func init MyFunctionProj
+Select a number for worker runtime:
+1. dotnet
+2. dotnet (isolated process)
+3. node
+4. python
+5. powershell
+6. custom
+Choose option: 1
+Select a number for language:
+1. c#
+2. f#
+Choose option: 1
+```
+
+
+</CodeSurfer>
 
 ---
 
 <CodeSurfer>
 
-```js title="This is a title" subtitle="and this a subtitle"
-function lorem(ipsum, dolor = 1) {
-  const sit = ipsum == null ? 0 : ipsum.sit;
-  dolor = sit - amet(dolor);
-  return sit
-    ? consectetur(ipsum, 0, dolor < 0 ? 0 : dolor)
-    : [];
-}
-
-function incididunt(ipsum, ut = 1) {
-  ut = labore.et(amet(ut), 0);
-  const sit = ipsum == null ? 0 : ipsum.sit;
-
-  if (!sit || ut < 1) {
-    return [];
-  }
-
-  let dolore = 0;
-  let magna = 0;
-  const aliqua = new eiusmod(labore.ut(sit / ut));
-
-  while (dolore < sit) {
-    aliqua[magna++] = consectetur(
-      ipsum,
-      dolore,
-      (dolore += ut)
-    );
-  }
-
-  return aliqua;
-}
+```shell
+> cd MyFunctionProj
 ```
 
-```js
-function lorem(ipsum, dolor = 1) {
-  const sit = ipsum == null ? 0 : ipsum.sit;
-  dolor = sit - amet(dolor);
-  return sit
-    ? consectetur(ipsum, 0, dolor < 0 ? 0 : dolor)
-    : [];
-}
 
-function adipiscing(...elit) {
-  if (!elit.sit) {
-    return [];
-  }
-
-  const sed = elit[0];
-  return eiusmod.tempor(sed) ? sed : [sed];
-}
-
-function incididunt(ipsum, ut = 1) {
-  ut = labore.et(amet(ut), 0);
-  const sit = ipsum == null ? 0 : ipsum.sit;
-
-  if (!sit || ut < 1) {
-    return [];
-  }
-
-  let dolore = 0;
-  let magna = 0;
-  const aliqua = new eiusmod(labore.ut(sit / ut));
-
-  while (dolore < sit) {
-    aliqua[magna++] = consectetur(
-      ipsum,
-      dolore,
-      (dolore += ut)
-    );
-  }
-
-  return aliqua;
-}
+```shell
+> cd MyFunctionProj
+> dotnet add package Microsoft.Azure.Functions.Extensions
 ```
 
-```diff 1[10:14],2[15:19],3[22:27],10:12
-
+```shell
+> cd MyFunctionProj
+> dotnet add package Microsoft.Azure.Functions.Extensions
+> dotnet add package Hasura.EventTriggers
 ```
 
 </CodeSurfer>
 
 ---
 
-<CodeSurferColumns themes={[vsDark, github]}>
+<CodeSurfer>
 
-<Step>
-
-```js
-const magna = aliqua => aliqua.ut((enim, ad) => enim, 0);
-```
 
 ```js
-const minim = (ad, enim) => dolore.magna(ad / enim);
-```
 
-</Step>
-
-<Step>
-
-```js
-const lorem = (ipsum, dolor, sit) => {
-  const amet = dolor - ipsum;
-  return consectetur.adipiscing(
+namespace SampleFuncApp
+{
+    public class Startup 
     {
-      elit: sed.eiusmod(sit - dolor) / amet + 2,
-    },
-    (tempor, incididunt) => ipsum + amet * incididunt
-  );
-};
+    }
+}
 
-const magna = aliqua => aliqua.ut((enim, ad) => enim, 0);
 ```
 
 ```js
-const minim = (ad, enim) => dolore.magna(ad / enim);
 
-const sed = (eiusmod, tempor, incididunt) => {
-  const ut = tempor - eiusmod;
-  return labore.et(
+namespace SampleFuncApp
+{
+    public class Startup : FunctionsStartup
     {
-      amet: dolore.magna(incididunt - tempor) / ut + 2,
-    },
-    (aliqua, elit) => eiusmod + ut * elit
-  );
-};
+        public override void Configure(IFunctionsHostBuilder builder)
+        {
+        }
+    }
+}
+
 ```
 
-</Step>
+```js
+using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+using SampleFuncApp;
 
-</CodeSurferColumns>
+[assembly: FunctionsStartup(typeof(Startup))]
+
+namespace SampleFuncApp
+{
+    public class Startup : FunctionsStartup
+    {
+        public override void Configure(IFunctionsHostBuilder builder)
+        {
+        }
+    }
+}
+
+```
+
+```js
+using Hasura.EventTriggers;
+using Hasura.EventTriggers.Configuration;
+using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+using SampleFuncApp;
+
+
+[assembly: FunctionsStartup(typeof(Startup))]
+
+namespace SampleFuncApp
+{
+    public class Startup : FunctionsStartup
+    {
+        public override void Configure(IFunctionsHostBuilder builder)
+        {
+        }
+    }
+}
+
+```
+
+```js
+using Hasura.EventTriggers;
+using Hasura.EventTriggers.Configuration;
+using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+using SampleFuncApp;
+
+
+[assembly: FunctionsStartup(typeof(Startup))]
+
+namespace SampleFuncApp
+{
+    public class Startup : FunctionsStartup
+    {
+        public override void Configure(IFunctionsHostBuilder builder)
+        {
+            var hasura = new HasuraServer(config =>
+            {
+                config.HasuraApiUrl = "https://localhost:8080/v1/metadata";
+            });
+      
+        }
+    }
+}
+
+```
+
+
+```js
+using Hasura.EventTriggers;
+using Hasura.EventTriggers.Configuration;
+using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+using SampleFuncApp;
+
+
+[assembly: FunctionsStartup(typeof(Startup))]
+
+namespace SampleFuncApp
+{
+    public class Startup : FunctionsStartup
+    {
+        public override void Configure(IFunctionsHostBuilder builder)
+        {
+            var hasura = new HasuraServer(config =>
+            {
+                config.HasuraApiUrl = "https://localhost:8080/v1/metadata";
+                config.AdminSecret = "12345";
+            });
+      
+        }
+    }
+}
+
+```
+
+
+```js
+using Hasura.EventTriggers;
+using Hasura.EventTriggers.Configuration;
+using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+using SampleFuncApp;
+
+
+[assembly: FunctionsStartup(typeof(Startup))]
+
+namespace SampleFuncApp
+{
+    public class Startup : FunctionsStartup
+    {
+        public override void Configure(IFunctionsHostBuilder builder)
+        {
+            var hasura = new HasuraServer(config =>
+            {
+                config.HasuraApiUrl = "https://localhost:8080/v1/metadata";
+                config.AdminSecret = "12345";
+                config.DefaultDatabaseType = DatabaseType.MsSql;
+            });
+      
+        }
+    }
+}
+
+```
+
+
+```js
+using Hasura.EventTriggers;
+using Hasura.EventTriggers.Configuration;
+using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+using SampleFuncApp;
+
+
+[assembly: FunctionsStartup(typeof(Startup))]
+
+namespace SampleFuncApp
+{
+    public class Startup : FunctionsStartup
+    {
+        public override void Configure(IFunctionsHostBuilder builder)
+        {
+            var hasura = new HasuraServer(config =>
+            {
+                config.HasuraApiUrl = "https://localhost:8080/v1/metadata";
+                config.AdminSecret = "12345";
+                config.DefaultDatabaseType = DatabaseType.MsSql;
+                config.BaseWebHookUrl = "{WEB_HOOK_API}";
+            });
+      
+        }
+    }
+}
+
+```
+</CodeSurfer>
 
 ---
 
-docs:  
-[codesurfer.pomb.us](https://codesurfer.pomb.us)
