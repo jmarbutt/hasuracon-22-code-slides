@@ -101,9 +101,9 @@ Choose option: 1
 <CodeSurfer>
 
 
-```js
+```js title="Startup.cs"
 
-namespace SampleFuncApp
+namespace MyFunctionProj
 {
     public class Startup 
     {
@@ -112,9 +112,9 @@ namespace SampleFuncApp
 
 ```
 
-```js
+```js title="Startup.cs"
 
-namespace SampleFuncApp
+namespace MyFunctionProj
 {
     public class Startup : FunctionsStartup
     {
@@ -126,13 +126,13 @@ namespace SampleFuncApp
 
 ```
 
-```js
+```js title="Startup.cs"
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
-using SampleFuncApp;
+using MyFunctionProj;
 
 [assembly: FunctionsStartup(typeof(Startup))]
 
-namespace SampleFuncApp
+namespace MyFunctionProj
 {
     public class Startup : FunctionsStartup
     {
@@ -144,16 +144,16 @@ namespace SampleFuncApp
 
 ```
 
-```js
+```js title="Startup.cs"
 using Hasura.EventTriggers;
 using Hasura.EventTriggers.Configuration;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
-using SampleFuncApp;
+using MyFunctionProj;
 
 
 [assembly: FunctionsStartup(typeof(Startup))]
 
-namespace SampleFuncApp
+namespace MyFunctionProj
 {
     public class Startup : FunctionsStartup
     {
@@ -165,16 +165,16 @@ namespace SampleFuncApp
 
 ```
 
-```js
+```js title="Startup.cs"
 using Hasura.EventTriggers;
 using Hasura.EventTriggers.Configuration;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
-using SampleFuncApp;
+using MyFunctionProj;
 
 
 [assembly: FunctionsStartup(typeof(Startup))]
 
-namespace SampleFuncApp
+namespace MyFunctionProj
 {
     public class Startup : FunctionsStartup
     {
@@ -192,16 +192,16 @@ namespace SampleFuncApp
 ```
 
 
-```js
+```js title="Startup.cs"
 using Hasura.EventTriggers;
 using Hasura.EventTriggers.Configuration;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
-using SampleFuncApp;
+using MyFunctionProj;
 
 
 [assembly: FunctionsStartup(typeof(Startup))]
 
-namespace SampleFuncApp
+namespace MyFunctionProj
 {
     public class Startup : FunctionsStartup
     {
@@ -220,16 +220,16 @@ namespace SampleFuncApp
 ```
 
 
-```js
+```js title="Startup.cs"
 using Hasura.EventTriggers;
 using Hasura.EventTriggers.Configuration;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
-using SampleFuncApp;
+using MyFunctionProj;
 
 
 [assembly: FunctionsStartup(typeof(Startup))]
 
-namespace SampleFuncApp
+namespace MyFunctionProj
 {
     public class Startup : FunctionsStartup
     {
@@ -249,16 +249,16 @@ namespace SampleFuncApp
 ```
 
 
-```js
+```js title="Startup.cs"
 using Hasura.EventTriggers;
 using Hasura.EventTriggers.Configuration;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
-using SampleFuncApp;
+using MyFunctionProj;
 
 
 [assembly: FunctionsStartup(typeof(Startup))]
 
-namespace SampleFuncApp
+namespace MyFunctionProj
 {
     public class Startup : FunctionsStartup
     {
@@ -277,7 +277,160 @@ namespace SampleFuncApp
 }
 
 ```
+
 </CodeSurfer>
 
 ---
 
+<CodeSurfer>
+
+```js 
+
+public class TodoModel
+{
+    public Guid Id { get; set; }
+    
+    public string Subject { get; set; }
+    
+    public DateTime? DueDate { get; set; }
+    
+    public bool IsComplete { get; set;  }
+}
+```
+
+</CodeSurfer>
+
+---
+
+<CodeSurfer>
+
+```shell
+> func new --template "Http Trigger" --name MyHttpTrigger
+```
+
+</CodeSurfer>
+
+---
+
+<CodeSurfer>
+
+```js
+using System;
+using System.IO;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+
+namespace MyFunctionProj
+{
+    public static class MyHttpTrigger
+    {
+        [FunctionName("MyHttpTrigger")]
+        public static async Task<IActionResult> Run(
+            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+            ILogger log)
+        {
+            log.LogInformation("C# HTTP trigger function processed a request.");
+
+            string name = req.Query["name"];
+
+            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            dynamic data = JsonConvert.DeserializeObject(requestBody);
+            name = name ?? data?.name;
+
+            string responseMessage = string.IsNullOrEmpty(name)
+                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
+                : $"Hello, {name}. This HTTP triggered function executed successfully.";
+
+            return new OkObjectResult(responseMessage);
+        }
+    }
+}
+
+```
+
+```js title="MyHttpTrigger.cs"
+using System;
+using System.IO;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+
+namespace MyFunctionProj
+{
+    public static class MyHttpTrigger
+    {
+        [FunctionName("MyHttpTrigger")]
+        public static async Task<IActionResult> Run(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+            ILogger log)
+        {
+            log.LogInformation("C# HTTP trigger function processed a request.");
+
+            string name = req.Query["name"];
+
+            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            dynamic data = JsonConvert.DeserializeObject(requestBody);
+            name = name ?? data?.name;
+
+            string responseMessage = string.IsNullOrEmpty(name)
+                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
+                : $"Hello, {name}. This HTTP triggered function executed successfully.";
+
+            return new OkObjectResult(responseMessage);
+        }
+    }
+}
+
+```
+
+```js title="MyHttpTrigger.cs"
+using System;
+using System.IO;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+
+namespace MyFunctionProj
+{
+    public static class MyHttpTrigger
+    {
+        [FunctionName("MyHttpTrigger")]
+        public static async Task<IActionResult> Run(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] EventTriggerPayload<TodoModel> req,
+            ILogger log)
+        {
+            log.LogInformation("C# HTTP trigger function processed a request.");
+
+            string name = req.Query["name"];
+
+            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            dynamic data = JsonConvert.DeserializeObject(requestBody);
+            name = name ?? data?.name;
+
+            string responseMessage = string.IsNullOrEmpty(name)
+                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
+                : $"Hello, {name}. This HTTP triggered function executed successfully.";
+
+            return new OkObjectResult(responseMessage);
+        }
+    }
+}
+
+```
+
+</CodeSurfer>
+
+---
